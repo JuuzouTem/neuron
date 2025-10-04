@@ -10,9 +10,8 @@ const MAX_NEURONS = 150;
 const CONNECTION_DISTANCE = 150;
 const GROWTH_SPEED = 0.5;
 const MOUSE_INFLUENCE_RADIUS = 250;
-const AXON_MAX_LENGTH = 350; // Aksonların geri çekilmeye başlamadan önceki max uzunluğu
+const AXON_MAX_LENGTH = 350;
 
-// Olay dinleyicileri
 window.addEventListener('mousemove', e => {
     mouse.x = e.clientX;
     mouse.y = e.clientY;
@@ -36,7 +35,6 @@ class Neuron {
         this.radius = Math.random() * 2 + 2;
         this.axons = [];
         
-        // YENİ: Daha yumuşak hareket için
         this.vx = (Math.random() - 0.5) * 0.2;
         this.vy = (Math.random() - 0.5) * 0.2;
         this.maxSpeed = 0.2;
@@ -59,7 +57,7 @@ class Neuron {
                 const connectionExists = this.axons.some(axon => axon.target === neuron);
                 if (!connectionExists) {
                     this.axons.push(new Axon(this, neuron));
-                    return; // Sadece bir tane bul ve çık
+                    return;
                 }
             }
         });
@@ -73,18 +71,15 @@ class Neuron {
         ctx.shadowColor = `rgba(100, 200, 255, ${this.activity})`;
         ctx.shadowBlur = 15;
         ctx.fill();
-        ctx.shadowBlur = 0; // Performans için gölgeyi sıfırla
+        ctx.shadowBlur = 0;
     }
     
     update() {
-        // GÜNCELLENDİ: Daha yumuşak hareket
-        // Sadece arada bir yön değiştir
         if (Math.random() < 0.01) {
             this.vx += (Math.random() - 0.5) * 0.1;
             this.vy += (Math.random() - 0.5) * 0.1;
         }
 
-        // Hızı sınırla
         const speed = Math.hypot(this.vx, this.vy);
         if (speed > this.maxSpeed) {
             this.vx = (this.vx / speed) * this.maxSpeed;
@@ -103,7 +98,6 @@ class Neuron {
             this.activity = Math.min(1.0, this.activity + 0.005);
         }
 
-        // YENİ: Tamamen geri çekilmiş aksonları temizle
         this.axons = this.axons.filter(axon => !axon.isFullyRetracted);
 
         this.axons.forEach(axon => axon.update());
@@ -120,7 +114,6 @@ class Axon {
         this.target = target;
         this.path = [{ x: source.x, y: source.y }];
         this.isComplete = false;
-        // YENİ: Geri çekilme durumu için
         this.isRetracting = false;
         this.isFullyRetracted = false;
     }
@@ -170,12 +163,11 @@ class Axon {
 
         const distToTarget = Math.hypot(newPoint.x - this.target.x, newPoint.y - this.target.y);
         
-        // GÜNCELLENDİ: Bağlantı veya geri çekilme kontrolü
         if (distToTarget < 10) {
             this.isComplete = true;
             this.target.boostActivity();
         } else if (this.path.length > AXON_MAX_LENGTH) {
-            this.isRetracting = true; // Boşlukta durmak yerine geri çekilmeye başla
+            this.isRetracting = true;
         }
     }
     
@@ -205,7 +197,6 @@ function animate() {
     ctx.fillStyle = 'rgba(0, 0, 0, 0.1)';
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-    // Aktif olmayan nöronları temizle
     neurons = neurons.filter(neuron => neuron.activity > 0.01);
 
     neurons.forEach(neuron => {
@@ -220,8 +211,8 @@ function animate() {
 init();
 animate();
 
-// Pencere yeniden boyutlandırıldığında canvas'ı ayarla
 window.addEventListener('resize', () => {
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
+
 });
