@@ -1,0 +1,36 @@
+/* Bu sefer atmosferi ciddiye alıyoruz. */
+body {
+    background: #000;
+    margin: 0;
+    overflow: hidden;
+    cursor: none;
+}
+canvas {
+    display: block;
+}
+/* Gelişmiş Mikroskop Filtresi */
+#container {
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+}
+#container::before { /* Gren efekti */
+    content: "";
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAMAAAAp4XiDAAAAUVBMVEWFhYWDg4N3d3dtbW17e3t1dXWBgYGHh4d5eXlzc3OLi4ubm5uVlZWPj4+NjY19fX2JiYl/f39ra2uRkZGZmZlpaWmXl5dvb29xcXGTk5NnZ2c8TV1mAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAIGNIUk0AAHolAACAgwAA+f8AAIDpAAB1MAAA6mAAADqYAAAXb5JfxUYAAABnSURBVEjH7dYxCgAgEACx82hB4iiIZKup/v8BlosgCRflQJtiKNLYAZCq1wEBbFCpBQY4fAEAFYDBj0AUjK8gQMHjB6AwBjkA3wGganUbgcFAMOXAAVYgKoI8gIAxwAi2xXTgD95Yx5M3BUYgAAAABJRU5ErkJggg==');
+    opacity: 0.08;
+    pointer-events: none;
+    z-index: 2;
+}
+#info {
+    position: absolute;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    color: rgba(255, 255, 255, 0.2);
+    font-family: monospace;
+    font-size: 14px;
+    pointer-events: none;
+    z-index: 3;
+}
